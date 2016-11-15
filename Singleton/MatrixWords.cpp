@@ -35,6 +35,7 @@ class MatrixWords{
 	
 	MatrixWords() {}
 	MatrixWords& operator= (MatrixWords& other){}
+	MatrixWords( const MatrixWords& other){}
 public:
 	
 	static MatrixWords& Instance(int n, int m) {
@@ -76,13 +77,7 @@ public:
 		}
 	}
 protected:
-	MatrixWords( const MatrixWords& other)
-	{
-		n_ = other.n_;
-		m_ = other.m_;
-		matListOfString = other.matListOfString;
-		p_instance = other.p_instance;
-	}
+	
 	
 	~MatrixWords()
 	{
@@ -126,10 +121,13 @@ private:
 	MatrixWords::MatrixWords() {}
 	MatrixWords& MatrixWords::operator= (MatrixWords& other){return *this;}
 	
-	MatrixWords& MatrixWords::Instance(int n, int m) {
+	static MatrixWords& MatrixWords::Instance(int n, int m) {
+
 		if(!p_instance)     
 		{
-			p_instance = new MatrixWords(n, m);
+			std::lock_guard<std::mutex> lock(mutLock);
+			if (!p_instance)
+				p_instance = new MatrixWords(n, m);
 		}
 		return *p_instance;
 	}
@@ -162,13 +160,7 @@ private:
 		}
 	}
 
-	MatrixWords::MatrixWords( const MatrixWords& other)
-	{
-		n_ = other.n_;
-		m_ = other.m_;
-		matListOfString = other.matListOfString;
-		p_instance = other.p_instance;
-	}
+	MatrixWords::MatrixWords( const MatrixWords& other){}
 	
 	MatrixWords::~MatrixWords()
 	{
