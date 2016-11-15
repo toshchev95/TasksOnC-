@@ -1,6 +1,7 @@
-#include "MatrixWords.cpp"
+#include "MatrixWords.h"
 
 MatrixWords * MatrixWords::p_instance = 0;
+std::mutex MatrixWords::mutLock;
 
 void test(MatrixWords& element)
 {
